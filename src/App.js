@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, memo, useCallback } from 'react';
+import { Quote } from './BL';
+import './App.scss';
+import QuoteListComponent from './Quotes/QuoteListComponent/QuoteListComponent';
+import AddNewQuoteComponent from './Quotes/AddNewQuoteComponent/AddNewQuoteComponent';
 
-function App() {
+const App = memo(() => {
+  const [quotes, setQuotes] = useState(() =>
+    Array.from({ length: 5 }, (quote, i) => new Quote({ id: ++i }))
+  );
+
+  const addNewQuote = useCallback(
+    (quote) => {
+      setQuotes([...quotes, { ...quote, id: quotes.length + 1 }]);
+    },
+    [quotes, setQuotes]
+  );
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <header></header>
+
+      <main className="ui container">
+        <QuoteListComponent quotes={quotes} />
+
+        <div className="ui divider"></div>
+
+        <AddNewQuoteComponent addNewQuote={addNewQuote} />
+      </main>
     </div>
   );
-}
+});
 
 export default App;
