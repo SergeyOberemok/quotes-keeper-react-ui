@@ -1,15 +1,20 @@
 import React from 'react';
 import { Quote } from '../../BL/quote';
 import './AddNewQuoteComponent.scss';
+import QuotesContext from '../QuotesContext';
 
 class AddNewQuoteComponent extends React.Component {
+  static contextType = QuotesContext;
+
   constructor(props) {
     super(props);
 
     this.state = { value: '' };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlers = {
+      form: { onSubmit: this.handleSubmit.bind(this) },
+      input: { onChange: this.handleChange.bind(this) },
+    };
   }
 
   handleChange(event) {
@@ -19,7 +24,7 @@ class AddNewQuoteComponent extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    this.props.addNewQuote(new Quote({ phrase: this.state.value }));
+    this.context.addNewQuote(new Quote({ phrase: this.state.value }));
 
     this.setState({ value: '' });
   }
@@ -27,14 +32,14 @@ class AddNewQuoteComponent extends React.Component {
   render() {
     return (
       <div className="add-new-quote--wrapper">
-        <form className="ui form" onSubmit={this.handleSubmit}>
+        <form className="ui form" {...this.handlers.form}>
           <div className="field">
             <label htmlFor="phrase">Phrase</label>
             <input
               type="text"
               id="phrase"
               value={this.state.value}
-              onChange={this.handleChange}
+              {...this.handlers.input}
               placeholder="phrase"
             />
           </div>
