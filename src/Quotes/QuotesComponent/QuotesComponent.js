@@ -1,54 +1,47 @@
-import React from 'react';
-import AddNewQuoteComponent from '../AddNewQuoteComponent/AddNewQuoteComponent';
+import React, { useState } from 'react';
 import { Quote } from '../../BL';
+import AddNewQuoteComponent from '../AddNewQuoteComponent/AddNewQuoteComponent';
 import QuoteListComponent from '../QuoteListComponent/QuoteListComponent';
-import './QuotesComponent.scss';
 import QuotesContext from '../QuotesContext';
+import './QuotesComponent.scss';
 
-class QuotesComponent extends React.Component {
-  constructor(props) {
-    super(props);
+function QuotesComponent() {
+  const [quotes, setQuotes] = useState(
+    Array.from({ length: 5 }, (quote, i) => new Quote({ id: ++i }))
+  );
+  const [counter, setCounter] = useState(5);
 
-    this.state = {
-      quotes: Array.from({ length: 5 }, (quote, i) => new Quote({ id: ++i })),
-      counter: 5,
-    };
+  function addNewQuote(quote) {
+    const newQuote = { ...quote, id: counter + 1 };
+
+    setCounter(newQuote.id);
+    setQuotes([...quotes, newQuote]);
   }
 
-  addNewQuote(quote) {
-    const counter = this.state.counter + 1;
-    const quotes = [...this.state.quotes, { ...quote, id: counter }];
-
-    this.setState({ quotes, counter });
-  }
-
-  removeQuote(quote) {
-    const quotes = [...this.state.quotes];
+  function removeQuote(quote) {
     const index = quotes.findIndex((item) => item.id === quote.id);
 
     quotes.splice(index, 1);
 
-    this.setState({ quotes });
+    setQuotes([...quotes]);
   }
 
-  render() {
-    return (
-      <QuotesContext.Provider
-        value={{
-          addNewQuote: this.addNewQuote.bind(this),
-          removeQuote: this.removeQuote.bind(this),
-        }}
-      >
-        <div className="ui container">
-          <QuoteListComponent quotes={this.state.quotes} />
+  return (
+    <QuotesContext.Provider
+      value={{
+        addNewQuote,
+        removeQuote,
+      }}
+    >
+      <div className="ui container">
+        <QuoteListComponent quotes={quotes} />
 
-          <div className="ui divider"></div>
+        <div className="ui divider"></div>
 
-          <AddNewQuoteComponent />
-        </div>
-      </QuotesContext.Provider>
-    );
-  }
+        <AddNewQuoteComponent />
+      </div>
+    </QuotesContext.Provider>
+  );
 }
 
 export default QuotesComponent;

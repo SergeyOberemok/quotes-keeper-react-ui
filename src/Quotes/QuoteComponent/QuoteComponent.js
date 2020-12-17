@@ -1,38 +1,26 @@
-import { Component } from 'react';
-import './QuoteComponent.scss';
+import { useContext } from 'react';
 import QuotesContext from '../QuotesContext';
+import './QuoteComponent.scss';
 
-class QuoteComponent extends Component {
-  static contextType = QuotesContext;
+function QuoteComponent(props) {
+  const { removeQuote } = useContext(QuotesContext);
 
-  constructor(props) {
-    super(props);
-
-    this.removeClicked = this.removeClicked.bind(this);
-  }
-
-  removeClicked(event) {
-    this.context.removeQuote(this.props.quote);
-  }
-
-  render() {
-    return (
-      <div className="quote--wrapper">
-        <div className="ui grid">
-          <div className="two column row">
-            <div className="left fifteen wide floated column">
-              <div>Quote {this.props.quote.id}</div>
-              <div>{this.props.quote.phrase}</div>
-              <div>{this.props.quote.author}</div>
-            </div>
-            <div className="right one wide center aligned floated column">
-              <i className="close icon" onClick={this.removeClicked}></i>
-            </div>
+  return (
+    <div className="quote--wrapper">
+      <div className="ui grid">
+        <div className="two column row">
+          <div className="left fifteen wide floated column">
+            <div>Quote {props.quote.id}</div>
+            <div>{props.quote.phrase}</div>
+            <div>{props.quote.author}</div>
+          </div>
+          <div className="right one wide center aligned floated column">
+            <i className="close icon" onClick={() => removeQuote(props.quote)}></i>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default QuoteComponent;
