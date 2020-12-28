@@ -1,18 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { NotificationContainer } from 'react-notifications';
 
-import 'semantic-ui-css/semantic.min.css'
+import 'semantic-ui-css/semantic.min.css';
+import 'react-notifications/lib/notifications.css';
 import './index.scss';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-
-
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <div>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+
+    <NotificationContainer />
+  </div>,
   document.getElementById('root')
 );
 

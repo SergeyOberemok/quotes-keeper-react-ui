@@ -8,6 +8,8 @@ const App = memo(() => {
       <header></header>
 
       <main>
+        <h2 className="ui center aligned header">Quotes</h2>
+
         <QuotesComponent />
       </main>
     </div>

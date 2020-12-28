@@ -3,45 +3,59 @@ import { Quote } from '../../BL/quote';
 import QuotesContext from '../QuotesContext';
 import './AddNewQuoteComponent.scss';
 
-function useNewQuoteInputHandler(defaultValue = '') {
-  const [value, setValue] = useState(defaultValue);
-
-  function handleChange(event) {
-    setValue(event.target.value);
-  }
+function useNewQuoteInputsHandler() {
+  const defaultValue = '';
+  const [phrase, setPhrase] = useState(defaultValue);
+  const [author, setAuthor] = useState(defaultValue);
 
   return {
-    input: {
-      value,
-      onChange: handleChange,
+    inputs: {
+      phrase: {
+        value: phrase,
+        onChange: (event) => setPhrase(event.target.value),
+      },
+      author: {
+        value: author,
+        onChange: (event) => setAuthor(event.target.value),
+      },
     },
-    value: () => value,
-    clear: () => setValue(defaultValue ),
+    phrase: () => phrase,
+    author: () => author,
+    clear: () => {
+      setPhrase(defaultValue);
+      setAuthor(defaultValue);
+    },
   };
 }
 
 function AddNewQuoteComponent(props) {
   const { addNewQuote } = useContext(QuotesContext);
-  const inputHandler = useNewQuoteInputHandler('');
+  const inputsHandler = useNewQuoteInputsHandler('');
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    if (inputHandler.value()) {
-      addNewQuote(new Quote({ phrase: inputHandler.value() }));
+    if (inputsHandler.phrase()) {
+      addNewQuote(new Quote({ phrase: inputsHandler.phrase(), author: inputsHandler.author() }));
     }
 
-    inputHandler.clear();
+    inputsHandler.clear();
   }
 
   return (
     <div className="add-new-quote--wrapper">
       <form className="ui form" onSubmit={handleSubmit}>
-        <div className="field">
-          <label htmlFor="phrase">Phrase</label>
-          <input type="text" id="phrase" {...inputHandler.input} placeholder="phrase" />
+        <div className="two fields">
+          <div className="twelve wide field">
+            <label htmlFor="phrase">Phrase</label>
+            <input type="text" id="phrase" {...inputsHandler.inputs.phrase} placeholder="phrase" />
+          </div>
+          <div className="four wide field">
+            <label htmlFor="author">Author</label>
+            <input type="text" id="author" {...inputsHandler.inputs.author} placeholder="author" />
+          </div>
         </div>
-        <button className="ui button" type="submit">
+        <button className="ui button" type="submit" disabled={props.disabled}>
           Add new quote
         </button>
       </form>

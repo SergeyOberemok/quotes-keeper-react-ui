@@ -4,19 +4,10 @@ import './QuoteListComponent.scss';
 function QuoteListComponent(props) {
   return (
     <div className="quote-list--wrapper">
-      <div>
-        <h3>Quotes</h3>
-      </div>
       {props.quotes.length > 0 ? (
         <div className="ui divided items">
-          {props.quotes.map((quote) => {
-            return (
-              <div className="item" key={quote.id}>
-                <div className="content">
-                  <QuoteComponent quote={quote} />
-                </div>
-              </div>
-            );
+          {props.quotes.map((quote, index) => {
+            return <QuoteComponent key={index} quote={quote} />;
           })}
         </div>
       ) : (
